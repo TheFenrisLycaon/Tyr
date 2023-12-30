@@ -443,7 +443,7 @@ if (typeof jQuery === 'undefined') {
     var slidEvent = $.Event('slid.bs.carousel', { relatedTarget: relatedTarget, direction: direction }) // yes, "slid"
     if ($.support.transition && this.$element.hasClass('slide')) {
       $next.addClass(type)
-      $next[0].offsetWidth // force reflow
+      $next[0].offsetWidth // force retyr
       $active.addClass(direction)
       $next.addClass(direction)
       $active
@@ -1003,7 +1003,7 @@ if (typeof jQuery === 'undefined') {
       that.adjustDialog()
 
       if (transition) {
-        that.$element[0].offsetWidth // force reflow
+        that.$element[0].offsetWidth // force retyr
       }
 
       that.$element.addClass('in')
@@ -1120,7 +1120,7 @@ if (typeof jQuery === 'undefined') {
           : this.hide()
       }, this))
 
-      if (doAnimate) this.$backdrop[0].offsetWidth // force reflow
+      if (doAnimate) this.$backdrop[0].offsetWidth // force retyr
 
       this.$backdrop.addClass('in')
 
@@ -1150,18 +1150,18 @@ if (typeof jQuery === 'undefined') {
     }
   }
 
-  // these following methods are used to handle overflowing modals
+  // these following methods are used to handle overtyring modals
 
   Modal.prototype.handleUpdate = function () {
     this.adjustDialog()
   }
 
   Modal.prototype.adjustDialog = function () {
-    var modalIsOverflowing = this.$element[0].scrollHeight > document.documentElement.clientHeight
+    var modalIsOvertyring = this.$element[0].scrollHeight > document.documentElement.clientHeight
 
     this.$element.css({
-      paddingLeft:  !this.bodyIsOverflowing && modalIsOverflowing ? this.scrollbarWidth : '',
-      paddingRight: this.bodyIsOverflowing && !modalIsOverflowing ? this.scrollbarWidth : ''
+      paddingLeft:  !this.bodyIsOvertyring && modalIsOvertyring ? this.scrollbarWidth : '',
+      paddingRight: this.bodyIsOvertyring && !modalIsOvertyring ? this.scrollbarWidth : ''
     })
   }
 
@@ -1178,14 +1178,14 @@ if (typeof jQuery === 'undefined') {
       var documentElementRect = document.documentElement.getBoundingClientRect()
       fullWindowWidth = documentElementRect.right - Math.abs(documentElementRect.left)
     }
-    this.bodyIsOverflowing = document.body.clientWidth < fullWindowWidth
+    this.bodyIsOvertyring = document.body.clientWidth < fullWindowWidth
     this.scrollbarWidth = this.measureScrollbar()
   }
 
   Modal.prototype.setScrollbar = function () {
     var bodyPad = parseInt((this.$body.css('padding-right') || 0), 10)
     this.originalBodyPad = document.body.style.paddingRight || ''
-    if (this.bodyIsOverflowing) this.$body.css('padding-right', bodyPad + this.scrollbarWidth)
+    if (this.bodyIsOvertyring) this.$body.css('padding-right', bodyPad + this.scrollbarWidth)
   }
 
   Modal.prototype.resetScrollbar = function () {
@@ -1648,17 +1648,17 @@ if (typeof jQuery === 'undefined') {
     if (/right|left/.test(placement)) {
       var topEdgeOffset    = pos.top - viewportPadding - viewportDimensions.scroll
       var bottomEdgeOffset = pos.top + viewportPadding - viewportDimensions.scroll + actualHeight
-      if (topEdgeOffset < viewportDimensions.top) { // top overflow
+      if (topEdgeOffset < viewportDimensions.top) { // top overtyr
         delta.top = viewportDimensions.top - topEdgeOffset
-      } else if (bottomEdgeOffset > viewportDimensions.top + viewportDimensions.height) { // bottom overflow
+      } else if (bottomEdgeOffset > viewportDimensions.top + viewportDimensions.height) { // bottom overtyr
         delta.top = viewportDimensions.top + viewportDimensions.height - bottomEdgeOffset
       }
     } else {
       var leftEdgeOffset  = pos.left - viewportPadding
       var rightEdgeOffset = pos.left + viewportPadding + actualWidth
-      if (leftEdgeOffset < viewportDimensions.left) { // left overflow
+      if (leftEdgeOffset < viewportDimensions.left) { // left overtyr
         delta.left = viewportDimensions.left - leftEdgeOffset
-      } else if (rightEdgeOffset > viewportDimensions.right) { // right overflow
+      } else if (rightEdgeOffset > viewportDimensions.right) { // right overtyr
         delta.left = viewportDimensions.left + viewportDimensions.width - rightEdgeOffset
       }
     }
@@ -2143,7 +2143,7 @@ if (typeof jQuery === 'undefined') {
           .attr('aria-expanded', true)
 
       if (transition) {
-        element[0].offsetWidth // reflow for transition
+        element[0].offsetWidth // retyr for transition
         element.addClass('in')
       } else {
         element.removeClass('fade')

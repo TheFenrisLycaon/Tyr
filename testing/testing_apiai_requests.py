@@ -1,31 +1,32 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-from datetime import datetime
-from base_test_case import BaseTestCase
-from models import Goal
-from flow import app as tst_app
-from models import Habit, Task
-import json
 import imp
+import json
+from datetime import datetime
+
+from controllers.main import app as tst_app
+from models.models import Goal, Habit, Task
+
+from .base_test_case import BaseTestCase
+
 try:
-    imp.find_module('secrets', ['settings'])
+    imp.find_module("secrets", ["settings"])
 except ImportError:
     from settings import secrets_template as secrets
 else:
     from settings import secrets
 
 
-class DummyRequest():
-
+class DummyRequest:
     def __init__(self, body):
         self.body = json.dumps(body)
+
 
 FB_ID = "1182039228580000"
 
 
 class APIAITestCase(BaseTestCase):
-
     def setUp(self):
         self.set_application(tst_app)
         self.setup_testbed()
@@ -48,36 +49,24 @@ class APIAITestCase(BaseTestCase):
         g.Update(text=["Get it done", "Also get exercise"])
         g.put()
 
-
     def test_a_request(self):
         access_token = self.u.aes_access_token(client_id="google")
         data = {
             "lang": "en",
-            "status": {
-                "code": 200,
-                "errorType": "success"
-            },
+            "status": {"code": 200, "errorType": "success"},
             "timestamp": "2017-03-18T11:06:39.683Z",
             "sessionId": "1489835199537",
             "result": {
                 "source": "agent",
                 "score": 1.0,
                 "speech": "",
-                "fulfillment": {
-                    "speech": "",
-                    "messages": [
-                        {
-                            "type": 0,
-                            "speech": ""
-                        }
-                    ]
-                },
+                "fulfillment": {"speech": "", "messages": [{"type": 0, "speech": ""}]},
                 "parameters": {},
                 "contexts": [
                     {
                         "name": "google_assistant_welcome",
                         "parameters": {},
-                        "lifespan": 0
+                        "lifespan": 0,
                     }
                 ],
                 "resolvedQuery": "what are my tasks",
@@ -85,10 +74,10 @@ class APIAITestCase(BaseTestCase):
                     "intentId": "X",
                     "webhookForSlotFillingUsed": "false",
                     "intentName": "Task Request",
-                    "webhookUsed": "true"
+                    "webhookUsed": "true",
                 },
                 "action": "input.task_view",
-                "actionIncomplete": False
+                "actionIncomplete": False,
             },
             "id": "32fc0ce2-16a3-4d33-bf19-XXXXXXXXX",
             "originalRequest": {
@@ -99,7 +88,7 @@ class APIAITestCase(BaseTestCase):
                         {
                             "rawInputs": [
                                 {
-                                    "query": "at flow dashboard what are my tasks",
+                                    "query": "at Tyr what are my tasks",
                                     "annotationSets": [
                                         {
                                             "domain": 1,
@@ -107,12 +96,12 @@ class APIAITestCase(BaseTestCase):
                                                 {
                                                     "confidence": 1099999.998,
                                                     "startPosition": 3,
-                                                    "length": 4
+                                                    "length": 4,
                                                 }
-                                            ]
+                                            ],
                                         }
                                     ],
-                                    "inputType": 2
+                                    "inputType": 2,
                                 }
                             ],
                             "intent": "actions.intent.MAIN",
@@ -120,32 +109,28 @@ class APIAITestCase(BaseTestCase):
                                 {
                                     "text_value": "what are my tasks",
                                     "raw_text": "what are my tasks",
-                                    "name": "trigger_query"
+                                    "name": "trigger_query",
                                 }
-                            ]
+                            ],
                         }
                     ],
-                    "user": {
-                        "accessToken": access_token,
-                        "userId": "XXX"
-                    },
+                    "user": {"accessToken": access_token, "userId": "XXX"},
                     "surface": {
-                        "capabilities": [
-                            {
-                                "name": "actions.capability.AUDIO_OUTPUT"
-                            }
-                        ]
+                        "capabilities": [{"name": "actions.capability.AUDIO_OUTPUT"}]
                     },
-                    "conversation": {
-                        "conversationId": "1489835199537",
-                        "type": 1
-                    }
-                }
-            }
+                    "conversation": {"conversationId": "1489835199537", "type": 1},
+                },
+            },
         }
         # Reuqests for tasks
-        res = self.post("/api/agent/apiai/request", json.dumps(data), headers={'Auth-Key': secrets.API_AI_AUTH_KEY})
+        res = self.post(
+            "/api/agent/apiai/request",
+            json.dumps(data),
+            headers={"Auth-Key": secrets.API_AI_AUTH_KEY},
+        )
         self.assertOK(res)
         res_body = json.loads(res.normal_body)
-        self.assertEqual(res_body.get('speech'), "You haven't completed any tasks yet. You still need to do 'Dont forget the milk'.")
-
+        self.assertEqual(
+            res_body.get("speech"),
+            "You haven't completed any tasks yet. You still need to do 'Dont forget the milk'.",
+        )

@@ -204,7 +204,7 @@ export default class Settings extends React.Component {
 
                                     <div className="vpad">
                                         <label>Week Start</label>
-                                        <p>You can configure how Flow decides the start and end of each week, for example, to calculate weekly habit targets</p>
+                                        <p>You can configure how tyr decides the start and end of each week, for example, to calculate weekly habit targets</p>
 
                                         <Select
                                             options={AppConstants.WEEKDAYS}

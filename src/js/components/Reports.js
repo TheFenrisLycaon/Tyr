@@ -108,7 +108,7 @@ export default class Reports extends React.Component {
 
                 <h1>Exports</h1>
 
-                <p className="lead">Flow stores exports for 30 days, but they can be re-generated at any time.</p>
+                <p className="lead">tyr stores exports for 30 days, but they can be re-generated at any time.</p>
 
                 <FetchedList ref="list" url="/api/report" listStyle="mui" listProp="reports" renderItem={this.render_report.bind(this)} autofetch={true}/>
 

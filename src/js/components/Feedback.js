@@ -68,7 +68,7 @@ export default class Feedback extends React.Component {
                     <div className="col-sm-6">
                         <h3 className="vspace">Or, want to file a bug report?</h3>
 
-                        <p className="lead">Please create an issue on <a href="https://github.com/onejgordon/flow-dashboard/issues" target="_blank">Github</a>.</p>
+                        <p className="lead">Please create an issue on <a href="https://github.com/TheFenrisLycaon/tyr-dashboard/issues" target="_blank">Github</a>.</p>
 
                     </div>
                     

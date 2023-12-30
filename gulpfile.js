@@ -16,7 +16,7 @@ var path = {
   HTML_INDEX: 'src/index.html',
   OUT: 'build.js',
   DEST: 'dist',
-  BROWSERIFY_PATHS: ['./src/js','./node_modules'],
+  BROWSERIFY_PATHS: ['./src/js', './node_modules'],
   DEST_SRC: 'dist/src',
   ENTRY_POINT: './src/js/main.js'
 };
@@ -32,8 +32,8 @@ var BROWSERIFY_OPTS = {
   fullPaths: true
 };
 
-gulp.task('copy', function(){
-  gulp.src(path.HTML, {base: 'src/'})
+gulp.task('copy', function () {
+  gulp.src(path.HTML, { base: 'src/' })
     .pipe(gulp.dest(path.DEST));
 });
 
@@ -41,12 +41,12 @@ var bopts = assign({}, watchify.args, BROWSERIFY_OPTS);
 var b = browserify(bopts)
   .plugin(resolutions, 'react')
   .transform(babelify.configure({
-    optional: ["es7.decorators","es7.asyncFunctions","es7.classProperties"],
+    optional: ["es7.decorators", "es7.asyncFunctions", "es7.classProperties"],
     experimental: true
   })
-);
+  );
 
-gulp.task('watch', function() {
+gulp.task('watch', function () {
   var w = watchify(b);
   w.on('update', bundle); // on any dep update, runs the bundler
   w.on('log', log); // output build logs to terminal
@@ -62,52 +62,53 @@ function bundle() {
   var now = new Date();
   log(now + ' - built bundle');
 
-  var stream = b.bundle().on('error', function(err){
-      console.log(err.message);
-      this.emit('end');
-    })
+  var stream = b.bundle().on('error', function (err) {
+    console.log(err.message);
+    this.emit('end');
+  })
     .pipe(source(path.OUT))
     .pipe(buffer())
     .pipe(sourcemaps.init({ loadMaps: true }));
 
-    if (process.env.NODE_ENV === 'production') {
-        stream = stream.pipe(uglify());
-    }
+  if (process.env.NODE_ENV === 'production') {
+    stream = stream.pipe(uglify());
+  }
 
-    return (
-      stream
+  return (
+    stream
       .pipe(sourcemaps.write('./'))
       .pipe(gulp.dest(path.DEST_SRC))
-    );
+  );
 }
 
-gulp.task('build_html', function(){
+gulp.task('build_html', function () {
   gulp.src(path.HTML_INDEX)
     .pipe(hash_src(
-      {build_dir: "./",
-      src_path: "./dist/src/",
-      verbose: true,
-      hash_len: 6,
-      regex: /(<\s*(?:script|link).*?(?:src|href)\s*=\s*(?:"|'))((?!.*\?nc).*?)((?:"|')\s*(?:>\s*<\/\s*(?:script|link)\s*>|\s*\/*>))/ig,
-      analyze: function(match){
-        return {
-                prefix: match[1],
-                link:   match[2],
-                suffix: match[3]
-              };
-      }
-    }))
+      {
+        build_dir: "./",
+        src_path: "./dist/src/",
+        verbose: true,
+        hash_len: 6,
+        regex: /(<\s*(?:script|link).*?(?:src|href)\s*=\s*(?:"|'))((?!.*\?nc).*?)((?:"|')\s*(?:>\s*<\/\s*(?:script|link)\s*>|\s*\/*>))/ig,
+        analyze: function (match) {
+          return {
+            prefix: match[1],
+            link: match[2],
+            suffix: match[3]
+          };
+        }
+      }))
     .pipe(gulp.dest(path.DEST));
 });
 
-gulp.task('apply-prod-environment', function() {
-    process.stdout.write("Setting NODE_ENV to 'production'" + "\n");
-    process.env.NODE_ENV = 'production';
-    if (process.env.NODE_ENV != 'production') {
-        throw new Error("Failed to set NODE_ENV to production!!!!");
-    } else {
-        process.stdout.write("Successfully set NODE_ENV to production" + "\n");
-    }
+gulp.task('apply-prod-environment', function () {
+  process.stdout.write("Setting NODE_ENV to 'production'" + "\n");
+  process.env.NODE_ENV = 'production';
+  if (process.env.NODE_ENV != 'production') {
+    throw new Error("Failed to set NODE_ENV to production!!!!");
+  } else {
+    process.stdout.write("Successfully set NODE_ENV to production" + "\n");
+  }
 });
 
 gulp.task('production', ['apply-prod-environment', 'build_html', 'build_bundle']);

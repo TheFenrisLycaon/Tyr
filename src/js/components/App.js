@@ -102,7 +102,7 @@ export default class Private extends React.Component {
   render() {
     let {user} = this.props;
     let {SITENAME} = AppConstants;
-    let LOGO = <img src="/images/logo_white.png" className="flowlogo glow" width="50" />
+    let LOGO = <img src="/images/logo_white.png" className="tyrlogo glow" width="50" />
     let right_icon;
     let on_signin = this.props.location.pathname == '/app/login';
     let on_about = this.props.location.pathname == '/app/about';

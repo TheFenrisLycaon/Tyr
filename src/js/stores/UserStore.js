@@ -68,7 +68,7 @@ class UserStore {
         if (data.success) {
             this.clearUser();
             this.error = null;
-            console.log('Signed out of Flow');
+            console.log('Signed out of tyr');
             browserHistory.push('/app');
         }
     }

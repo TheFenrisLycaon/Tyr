@@ -2,13 +2,14 @@
 # -*- coding: utf8 -*-
 
 from datetime import datetime, timedelta
-from base_test_case import BaseTestCase
-from models import Habit, HabitDay
-from flow import app as tst_app
+
+from controllers.main import app as tst_app
+from models.models import Habit, HabitDay
+
+from .base_test_case import BaseTestCase
 
 
 class HabitTestCase(BaseTestCase):
-
     def setUp(self):
         self.set_application(tst_app)
         self.setup_testbed()
@@ -46,7 +47,9 @@ class HabitTestCase(BaseTestCase):
     def test_retrieve_history(self):
         # Toggle today and yesterday (create 2 habitdays)
         marked_done, hd = HabitDay.Toggle(self.habit_read, datetime.today())
-        marked_done, hd = HabitDay.Toggle(self.habit_read, datetime.today() - timedelta(days=1))
+        marked_done, hd = HabitDay.Toggle(
+            self.habit_read, datetime.today() - timedelta(days=1)
+        )
         hd_keys = HabitDay.All(self.habit_read.key)
         self.assertEqual(len(hd_keys), 2)
 
@@ -62,4 +65,3 @@ class HabitTestCase(BaseTestCase):
         # Confirm habit_run not affected
         hd_keys = HabitDay.All(self.habit_run.key)
         self.assertEqual(len(hd_keys), 1)  # Confirm still in db
-

@@ -4,10 +4,10 @@
 # To generate, run in Python:
 # import os
 # os.urandom(48)
-COOKIE_KEY = ''
+COOKIE_KEY = ""
 
 # GCP project info
-GOOGLE_PROJECT_ID = "flow-app-xxxx"
+GOOGLE_PROJECT_ID = ""
 GOOGLE_PROJECT_NO = 0
 
 # Create an oauth 2.0 web client ID from GCP console
@@ -29,7 +29,7 @@ DEV_GOOGLE_CLIENT_ID = "######.XXXXXXXXXXXX.apps.googleusercontent.com"
 G_MAPS_API_KEY = "XXXXXXXX"
 
 # AES Cypher Key (generate similarly to above with os.urandom(16))
-AES_CYPHER_KEY = '16 byte key ....'
+AES_CYPHER_KEY = "16 byte key ...."
 
 # Good Reads (optional)
 GR_API_KEY = ""
@@ -47,6 +47,6 @@ EVERNOTE_DEV_TOKEN = ""
 FB_ACCESS_TOKEN = ""
 FB_VERIFY_TOKEN = ""
 
-# Dialogflow (Previously API.AI, optional)
+# Dialogtyr (Previously API.AI, optional)
 API_AI_AUTH_KEY = ""
 API_AI_FB_CALLBACK = ""

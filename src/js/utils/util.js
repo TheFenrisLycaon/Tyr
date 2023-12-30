@@ -643,8 +643,8 @@ var util = {
     },
 
     set_title(title) {
-        if (title != null) title = title + " | Flow";
-        else title = "Flow";
+        if (title != null) title = title + " | tyr";
+        else title = "tyr";
         document.title = title;
     },
 

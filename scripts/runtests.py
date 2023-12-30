@@ -1,9 +1,9 @@
 #!/usr/bin/python
+import doctest
 import optparse
 import sys
 import unittest
-import doctest
-from os.path import dirname, abspath
+from os.path import abspath, dirname
 
 USAGE = """%prog SDK_PATH TEST_PATH
 Run unit tests for App Engine apps.
@@ -18,12 +18,12 @@ def main(sdk_path, test_path, module=None):
     p = dirname(abspath(test_path))
     sys.path.append(p)
     sys.path.insert(0, sdk_path)
-    sys.path.insert(0, 'lib')
+    sys.path.insert(0, "lib")
 
     import dev_appserver
 
     dev_appserver.fix_sys_path()
-    if module and module != 'all':
+    if module and module != "all":
         suite = unittest.loader.TestLoader().discover(test_path, pattern=module)
     else:
         suite = unittest.loader.TestLoader().discover(test_path)
@@ -34,11 +34,11 @@ def main(sdk_path, test_path, module=None):
     sys.exit(0 if test_result.wasSuccessful() else 1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = optparse.OptionParser(USAGE)
     options, args = parser.parse_args()
     if len(args) < 2:
-        print 'Error: 2+ arguments required.'
+        print("Error: 2+ arguments required.")
         parser.print_help()
         sys.exit(1)
     SDK_PATH = args[0]

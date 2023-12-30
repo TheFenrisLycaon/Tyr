@@ -21,9 +21,9 @@ export default class About extends React.Component {
         let _feedback;
         if (user) _feedback = (
             <div>
-                <h3>Thanks for Using Flow</h3>
+                <h3>Thanks for Using tyr</h3>
 
-                <p>Have feedback? Get in touch via Github, or email onejgordon (gmail).</p>
+                <p>Have feedback? Get in touch via Github, or email TheFenrisLycaon (gmail).</p>
             </div>
             )
         return (
@@ -31,7 +31,7 @@ export default class About extends React.Component {
 
                 <div className="text-center">
 
-                    <h2 style={{marginTop: "40px", marginBottom: "60px"}}>About Flow</h2>
+                    <h2 style={{marginTop: "40px", marginBottom: "60px"}}>About tyr</h2>
 
                     <p className="lead" style={{fontSize: "1.45em", color: "orange" }}>{ AppConstants.DEPRECATION }</p>
 
@@ -39,7 +39,7 @@ export default class About extends React.Component {
 
                     <div className="row">
 
-                        <h3>The Flow Dashboard</h3>
+                        <h3>The Tyr</h3>
 
                         <p className="lead" style={{fontSize: "1.45em"}}>Track habits, monthly and annual goals, and the top tasks of the day. Submit daily journals with customizable questions.</p>
 
@@ -47,7 +47,7 @@ export default class About extends React.Component {
 
                         <h3>Visualize everything.</h3>
 
-                        <p className="lead" style={{fontSize: "1.45em"}}>Everything you put into Flow can be visualized, including your daily journal questions, task completion...</p>
+                        <p className="lead" style={{fontSize: "1.45em"}}>Everything you put into tyr can be visualized, including your daily journal questions, task completion...</p>
 
                         <img src="/images/screenshots/analysis.png" className="img-responsive" />
 
@@ -66,24 +66,24 @@ export default class About extends React.Component {
                         <img src="/images/screenshots/timeline.png" className="img-responsive" />
 
 
-                        <h3>Chat with Flow</h3>
+                        <h3>Chat with tyr</h3>
 
                         <div className="row">
                             <div className="col-sm-6">
                                 <div className="center-block">
                                     <img src="/images/messenger_512.png" width="120" />
                                 </div>
-                                <p className="lead" style={{fontSize: "1.45em"}}>You can chat with <a href="https://www.facebook.com/FlowDashboard/" target="_blank">Flow on Facebook Messenger</a> to review goals, commit to and complete tasks and habits, and answer your daily journal questions.</p>
+                                <p className="lead" style={{fontSize: "1.45em"}}>You can chat with <a href="/" target="_blank">tyr on Facebook Messenger</a> to review goals, commit to and complete tasks and habits, and answer your daily journal questions.</p>
                             </div>
                             <div className="center-block">
                                 <img src="/images/gassistant_512.png" width="120" />
-                                <p className="lead" style={{fontSize: "1.45em"}}>You can also interact with Flow via <a href="https://assistant.google.com/services/a/uid/000000832a6c27e4?hl=en-GB" target="_blank">Google Assistant</a>, and therefore via Google Home or Assistant on mobile. Try saying "Ok Google, Talk to Flow Dashboard", or "Hey Google at Flow Dashboard, mark run as complete".</p>
+                                <p className="lead" style={{fontSize: "1.45em"}}>You can also interact with tyr via <a href="https://assistant.google.com/services/a/uid/000000832a6c27e4?hl=en-GB" target="_blank">Google Assistant</a>, and therefore via Google Home or Assistant on mobile. Try saying "Ok Google, Talk to Tyr", or "Hey Google at Tyr, mark run as complete".</p>
                             </div>
                         </div>
 
 
                         <div hidden={user != null}>
-                            <h3>Try Flow</h3>
+                            <h3>Try tyr</h3>
                             <p className="lead" style={{fontSize: "1.45em"}}><Link to="/app/login"><RaisedButton primary={true} label="Sign in" /></Link> to get started.</p>
                         </div>
 
@@ -92,16 +92,16 @@ export default class About extends React.Component {
                                 <h3>Your Data is Yours</h3>
 
                                 <p className="lead" style={{fontSize: "1.45em"}}>
-                                    Flow will never share your data with any third party without explicit authorization.<br/><br/>
+                                    tyr will never share your data with any third party without explicit authorization.<br/><br/>
                                     Export any of your data, at any time, to CSV. Developers can also access their data via API.<br/>
                                     <Link to="/app/privacy">See our privacy policy</Link>.
                                 </p>
 
                             </div>
                             <div className="col-sm-6">
-                                <h3>Flow is Open Source</h3>
-                                <p className="lead" style={{fontSize: "1.45em"}}>Run your own instance of Flow, or contribute. Also see the <a href="http://docs.flowdash.apiary.io/" target="_blank">API documentation</a>.</p>
-                                <a href="https://github.com/onejgordon/flow-dashboard" target="_blank"><RaisedButton label="Source on Github" /></a>
+                                <h3>tyr is Open Source</h3>
+                                <p className="lead" style={{fontSize: "1.45em"}}>Run your own instance of tyr, or contribute. Also see the <a href="/" target="_blank">API documentation</a>.</p>
+                                <a href="https://github.com/TheFenrisLycaon/tyr-dashboard" target="_blank"><RaisedButton label="Source on Github" /></a>
                             </div>
                         </div>
 

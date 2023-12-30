@@ -1,11 +1,11 @@
 {
-  "name": "flow-dashboard",
+  "name": "tyr-dashboard",
   "version": "1.0.0",
-  "description": "Jeremy Gordon",
+  "description": "Fenris Lycaon",
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "github.com/onejgordon/flow-dashboard"
+    "url": "github.com/TheFenrisLycaon/tyr-dashboard"
   },
   "scripts": {
     "preinstall": "npx npm-force-resolutions",
@@ -13,7 +13,7 @@
     "purge": "./node_modules/.bin/react-native-clean-project"
   },
   "keywords": [],
-  "author": "Jeremy Gordon",
+  "author": "Fenris Lycaon",
   "license": "MIT",
   "dependencies": {
     "alt": "^0.18.2",

@@ -212,7 +212,7 @@ export default class Integrations extends React.Component {
                         <Tab label="BigQuery" style={this.tab_style('bigquery')}>
                             <FlatButton label="Authenticate with BigQuery" onClick={this.authenticate_google_service.bind(this, 'bigquery')} />
                             <p className="lead">
-                                Flow can push daily panel data in a clean format to BigQuery for additional analysis.
+                                tyr can push daily panel data in a clean format to BigQuery for additional analysis.
                                 Data is currently aggregated and pushed weekly.<br/>
                                 To set up BigQuery integration:
                             </p>
@@ -297,7 +297,7 @@ export default class Integrations extends React.Component {
 
                     <Tab label="Evernote" style={this.tab_style('evernote')}>
 
-                        <p className="lead">Flow will receive new notes/quotes/excerpts added to specified notebooks on Evernote.</p>
+                        <p className="lead">tyr will receive new notes/quotes/excerpts added to specified notebooks on Evernote.</p>
 
                         <FlatButton label={ evernote_connected ? "Connected" : "Connect" } onClick={this.start_evernote_authentication.bind(this)} disabled={evernote_connected}/>
 
@@ -368,7 +368,7 @@ export default class Integrations extends React.Component {
 
                         <h4>Configure Activity Capture</h4>
 
-                        <p className="lead">Flow can capture daily durations for one ore more activities from your Google Fit account.
+                        <p className="lead">tyr can capture daily durations for one ore more activities from your Google Fit account.
                             Enter a comma separated list of keywords (to match against Fit activity name and description).
                             This keyword will also be used as the tracking variable name.
                             For each variable, the day's total activity duration (in seconds) will be stored.</p>

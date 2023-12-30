@@ -35,7 +35,7 @@ deploy(){
 	build_js
 	cd ../
 	# Avoid deploy if config not setup
-	if gcloud config configurations activate flow
+	if gcloud config configurations activate tyr
 	then
 		gcloud app deploy $deploy_configs --quiet --version=$version --no-promote
 	fi

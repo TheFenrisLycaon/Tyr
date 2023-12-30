@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for your interest in Flow Dashboard. All forms of contribution are
+Thanks for your interest in Tyr. All forms of contribution are
 welcome, from issue reports to PRs.
 
 * We use node.js v3 for development and testing.
@@ -10,7 +10,7 @@ welcome, from issue reports to PRs.
 Key files:
 
 * `models.py` - All db model definitions, most with Update() and Fetch() methods
-* `flow.py` - WSGI app setup and route lookup for all handlers and API calls
+* `main.py` - WSGI app setup and route lookup for all handlers and API calls
 * `api.py` - All API calls
 * `Routes.js` - Core react-router routes /app etc
 * `App.js` - Component for main app frame, renders all sub-routes as children
@@ -26,5 +26,4 @@ early and is a good way to discuss what you're planning to do.
 know. We'll help you get started, rather than adding it to the queue.
 * Where possible, include tests with your changes, either that demonstrates the
 bug, or tests the new functionality. If you're not sure how to test your
-changes, feel free to ping @onejgordon
-
+changes, feel free to ping @TheFenrisLycaon

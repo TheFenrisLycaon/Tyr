@@ -13,7 +13,7 @@ var Styles = {
             paddingTop: '0 !important',
             marginTop: '-65px !important',
             bottom: '0 !important',
-            overflow: 'scroll !important',
+            overtyr: 'scroll !important',
             height: 'auto !important'
         }
     }

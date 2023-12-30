@@ -1,17 +1,21 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-from datetime import datetime, date
-from base_test_case import BaseTestCase
-from models import Task, Project, Report, Goal, MiniJournal, Habit, HabitDay
-from constants import REPORT
-from flow import app as tst_app
-import tools
+from datetime import date, datetime
+
+from utils import tools
+
+from constants.constants import REPORT
+from controllers.main import app as tst_app
+from models.models import (Goal, Habit, HabitDay, MiniJournal, Project, Report,
+                           Task)
+
+from .base_test_case import BaseTestCase
+
 DATE_FMT = "%Y-%m-%d %H:%M:%S %Z"
 
 
 class ReportsTestCases(BaseTestCase):
-
     def setUp(self):
         self.set_application(tst_app)
         self.setup_testbed()
@@ -20,14 +24,20 @@ class ReportsTestCases(BaseTestCase):
         self.u = self.users[0]
 
     def _test_report(self, params, expected_output):
-        response = self.post_json("/api/report/generate", params, headers=self.api_headers)
-        rid = response.get('report', {}).get('id')
+        response = self.post_json(
+            "/api/report/generate", params, headers=self.api_headers
+        )
+        rid = response.get("report", {}).get("id")
         self.execute_tasks_until_empty()
         response = self.get("/api/report/serve?rid=%s" % rid, headers=self.api_headers)
         compare_output = response.body  # Avoid whitespace normalization in normal_body
-        compare_output = compare_output.replace('\r\n', '\n').replace('\r', '\n').split('\n')
-        self.assertEqual([x for x in compare_output if x], [','.join(eo) for eo in expected_output])
-        self.assertEqual(response.content_type, 'text/csv')
+        compare_output = (
+            compare_output.replace("\r\n", "\n").replace("\r", "\n").split("\n")
+        )
+        self.assertEqual(
+            [x for x in compare_output if x], [",".join(eo) for eo in expected_output]
+        )
+        self.assertEqual(response.content_type, "text/csv")
         report = self.u.get(Report, rid)
         self.assertTrue(report.is_done())
         self.assertTrue(report.get_duration() > 0)
@@ -38,17 +48,17 @@ class ReportsTestCases(BaseTestCase):
         task.put()
 
         self._test_report(
-            {'type': REPORT.TASK_REPORT},
+            {"type": REPORT.TASK_REPORT},
             [
                 [
-                    'Date Created',
-                    'Date Due',
-                    'Date Done',
-                    'Title',
-                    'Done',
-                    'Archived',
-                    'Seconds Logged',
-                    'Complete Sessions Logged'
+                    "Date Created",
+                    "Date Due",
+                    "Date Done",
+                    "Title",
+                    "Done",
+                    "Archived",
+                    "Seconds Logged",
+                    "Complete Sessions Logged",
                 ],
                 [
                     tools.sdatetime(task.dt_created, fmt=DATE_FMT),
@@ -58,9 +68,9 @@ class ReportsTestCases(BaseTestCase):
                     "0",
                     "0",
                     "0",
-                    "0"
-                ]
-            ]
+                    "0",
+                ],
+            ],
         )
 
     def test_goal_report(self):
@@ -69,18 +79,17 @@ class ReportsTestCases(BaseTestCase):
         g.put()
 
         self._test_report(
-            {'type': REPORT.GOAL_REPORT},
+            {"type": REPORT.GOAL_REPORT},
             [
-
                 [
-                    'Goal Period',
-                    'Date Created',
-                    'Text 1',
-                    'Text 2',
-                    'Text 3',
-                    'Text 4',
-                    'Goal Assessments',
-                    'Overall Assessment'
+                    "Goal Period",
+                    "Date Created",
+                    "Text 1",
+                    "Text 2",
+                    "Text 3",
+                    "Text 4",
+                    "Goal Assessments",
+                    "Overall Assessment",
                 ],
                 [
                     "2017",
@@ -89,34 +98,23 @@ class ReportsTestCases(BaseTestCase):
                     "Goal 2",
                     "",
                     "",
-                    "\"3,4\"",
-                    "3.5"
-                ]
-            ]
+                    '"3,4"',
+                    "3.5",
+                ],
+            ],
         )
 
     def test_journal_report(self):
         jrnl = MiniJournal.Create(self.u, date=date(2017, 4, 5))
-        jrnl.Update(lat="-1.289744", lon="36.7694933", tags=[], data={'happiness': 9})
+        jrnl.Update(lat="-1.289744", lon="36.7694933", tags=[], data={"happiness": 9})
         jrnl.put()
 
         self._test_report(
-            {'type': REPORT.JOURNAL_REPORT},
+            {"type": REPORT.JOURNAL_REPORT},
             [
-
-                [
-                    'Date',
-                    'Tags',
-                    'Location',
-                    'Data'
-                ],
-                [
-                    "2017-04-05",
-                    "",
-                    "\"-1.289744,36.7694933\"",
-                    "\"{\"\"happiness\"\": 9}\""
-                ]
-            ]
+                ["Date", "Tags", "Location", "Data"],
+                ["2017-04-05", "", '"-1.289744,36.7694933"', '"{""happiness"": 9}"'],
+            ],
         )
 
     def test_habit_report(self):
@@ -126,7 +124,7 @@ class ReportsTestCases(BaseTestCase):
         marked_done, hd = HabitDay.Toggle(habit_run, datetime.today())
 
         self._test_report(
-            {'type': REPORT.HABIT_REPORT},
+            {"type": REPORT.HABIT_REPORT},
             [
                 ["Created", "Updated", "Date", "Habit", "Done", "Committed"],
                 [
@@ -135,24 +133,44 @@ class ReportsTestCases(BaseTestCase):
                     tools.iso_date(datetime.now()),
                     "Run",
                     "1",
-                    "0"
-                ]
-            ]
+                    "0",
+                ],
+            ],
         )
 
     def test_project_report(self):
         prj = Project.Create(self.u)
-        prj.Update(title="New Project", subhead="Project subhead", due=datetime(2017, 4, 5))
+        prj.Update(
+            title="New Project", subhead="Project subhead", due=datetime(2017, 4, 5)
+        )
         prj.set_progress(3)
         prj.put()
 
         self._test_report(
-            {'type': REPORT.PROJECT_REPORT},
+            {"type": REPORT.PROJECT_REPORT},
             [
-                ["Date Created", "Date Due", "Date Completed", "Date Archived", "Title", "Subhead",
-                 "Links", "Starred", "Archived", "Progress", 'Progress 10%', 'Progress 20%', 'Progress 30%',
-                 'Progress 40%', 'Progress 50%', 'Progress 60%', 'Progress 70%', 'Progress 80%',
-                 'Progress 90%', 'Progress 100%'],
+                [
+                    "Date Created",
+                    "Date Due",
+                    "Date Completed",
+                    "Date Archived",
+                    "Title",
+                    "Subhead",
+                    "Links",
+                    "Starred",
+                    "Archived",
+                    "Progress",
+                    "Progress 10%",
+                    "Progress 20%",
+                    "Progress 30%",
+                    "Progress 40%",
+                    "Progress 50%",
+                    "Progress 60%",
+                    "Progress 70%",
+                    "Progress 80%",
+                    "Progress 90%",
+                    "Progress 100%",
+                ],
                 [
                     tools.sdatetime(prj.dt_created, fmt="%Y-%m-%d %H:%M:%S %Z"),
                     tools.sdatetime(prj.dt_due, fmt="%Y-%m-%d %H:%M:%S %Z"),
@@ -166,20 +184,26 @@ class ReportsTestCases(BaseTestCase):
                     "30%",
                     "N/A",
                     "N/A",
-                    tools.sdatetime(tools.dt_from_ts(prj.progress_ts[2]), fmt="%Y-%m-%d %H:%M:%S %Z"),
+                    tools.sdatetime(
+                        tools.dt_from_ts(prj.progress_ts[2]), fmt="%Y-%m-%d %H:%M:%S %Z"
+                    ),
                     "N/A",
                     "N/A",
                     "N/A",
                     "N/A",
                     "N/A",
                     "N/A",
-                    "N/A"
-                ]
-            ]
+                    "N/A",
+                ],
+            ],
         )
 
     def test_fetch_and_delete(self):
-        self.post_json("/api/report/generate", {'type': REPORT.TASK_REPORT}, headers=self.api_headers)
+        self.post_json(
+            "/api/report/generate",
+            {"type": REPORT.TASK_REPORT},
+            headers=self.api_headers,
+        )
         self.execute_tasks_until_empty()
         reports = Report.Fetch(self.u)
         self.assertEqual(len(reports), 1)

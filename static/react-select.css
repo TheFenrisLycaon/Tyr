@@ -39,7 +39,7 @@
   border-collapse: separate;
   height: 36px;
   outline: none;
-  overflow: hidden;
+  overtyr: hidden;
   position: relative;
   width: 100%;
 }
@@ -82,8 +82,8 @@
   right: 0;
   top: 0;
   max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overtyr: hidden;
+  text-overtyr: ellipsis;
   white-space: nowrap;
 }
 .has-value.Select--single > .Select-control .Select-value .Select-value-label,
@@ -211,7 +211,7 @@
   width: 1px;
   margin: -1px;
   clip: rect(0, 0, 0, 0);
-  overflow: hidden;
+  overtyr: hidden;
   float: left;
 }
 @-webkit-keyframes Select-animation-fadeIn {
@@ -244,11 +244,11 @@
   top: 100%;
   width: 100%;
   z-index: 1;
-  -webkit-overflow-scrolling: touch;
+  -webkit-overtyr-scrolling: touch;
 }
 .Select-menu {
   max-height: 198px;
-  overflow-y: auto;
+  overtyr-y: auto;
 }
 .Select-option {
   box-sizing: border-box;

@@ -70,7 +70,7 @@ export default class Auth extends React.Component {
 
                     <h2 style={{marginTop: "140px", marginBottom: "60px"}}>To connect to {provider.name}, sign in to {SITENAME}</h2>
 
-                    <Link to="/app/about"><RaisedButton label="Learn More about Flow" /></Link>
+                    <Link to="/app/about"><RaisedButton label="Learn More about tyr" /></Link>
 
                     <p>Or</p>
 

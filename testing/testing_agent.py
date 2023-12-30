@@ -2,17 +2,18 @@
 # -*- coding: utf8 -*-
 
 from datetime import datetime, timedelta
-from base_test_case import BaseTestCase
-from models import JournalTag, Goal, MiniJournal
-from constants import JOURNAL, HABIT, JOURNAL, TASK, GOAL
-from flow import app as tst_app
+
+from utils import tools
+
+from constants.constants import GOAL, HABIT, JOURNAL, TASK
+from main import app as tst_app
+from models.models import Goal, Habit, JournalTag, MiniJournal, Task
 from services.agent import ConversationAgent
-from models import Habit, Task
-import tools
+
+from .base_test_case import BaseTestCase
 
 
 class AgentTestCase(BaseTestCase):
-
     def setUp(self):
         self.set_application(tst_app)
         self.setup_testbed()
@@ -39,47 +40,66 @@ class AgentTestCase(BaseTestCase):
         self.ca = ConversationAgent(user=self.u)
 
     def test_agent_status_query(self):
-        speech, data, end_convo = self.ca.respond_to_action('input.status_request')
-        self.assertEqual(speech, "Alright George. You haven't completed any tasks yet. You still need to do 'Dont forget the milk'. No habits done yet.")
+        speech, data, end_convo = self.ca.respond_to_action("input.status_request")
+        self.assertEqual(
+            speech,
+            "Alright George. You haven't completed any tasks yet. You still need to do 'Dont forget the milk'. No habits done yet.",
+        )
 
     def test_agent_goals(self):
-        speech, data, end_convo = self.ca.respond_to_action('input.goals_request')
+        speech, data, end_convo = self.ca.respond_to_action("input.goals_request")
         this_month = datetime.strftime(datetime.today(), "%B %Y")
-        self.assertEqual(speech, "Goals for %s. 1: Get it done. 2: Also get exercise. " % this_month)
+        self.assertEqual(
+            speech, "Goals for %s. 1: Get it done. 2: Also get exercise. " % this_month
+        )
 
     def test_agent_habit_add(self):
-        speech, data, end_convo = self.ca.respond_to_action('input.habit_add', parameters={'habit': 'meditate'})
+        speech, data, end_convo = self.ca.respond_to_action(
+            "input.habit_add", parameters={"habit": "meditate"}
+        )
         self.assertTrue("Habit 'Meditate' added" in speech, speech)
 
     def test_agent_habit_report(self):
-        speech, data, end_convo = self.ca.respond_to_action('input.habit_or_task_report', parameters={'habit_or_task': 'run'})
+        speech, data, end_convo = self.ca.respond_to_action(
+            "input.habit_or_task_report", parameters={"habit_or_task": "run"}
+        )
         self.assertTrue("'Run' is marked as complete" in speech, speech)
 
-        speech, data, end_convo = self.ca.respond_to_action('input.habit_status')
+        speech, data, end_convo = self.ca.respond_to_action("input.habit_status")
         self.assertEqual("Good work on doing 1 habit ('Run')!", speech)
 
     def test_agent_task_report(self):
-        speech, data, end_convo = self.ca.respond_to_action('input.habit_or_task_report', parameters={'habit_or_task': 'the milk'})
-        self.assertTrue("Task 'Dont forget the milk' is marked as complete" in speech, speech)
+        speech, data, end_convo = self.ca.respond_to_action(
+            "input.habit_or_task_report", parameters={"habit_or_task": "the milk"}
+        )
+        self.assertTrue(
+            "Task 'Dont forget the milk' is marked as complete" in speech, speech
+        )
 
         # Check task is marked complete
         self.milk = self.milk.key.get()  # Reload from ndb
         self.assertTrue(self.milk.is_done())
 
         # And task report confirms this
-        speech, data, end_convo = self.ca.respond_to_action('input.task_view')
+        speech, data, end_convo = self.ca.respond_to_action("input.task_view")
         self.assertEqual("You've completed 1 task for today.", speech)
 
     def test_agent_habit_commitment(self):
-        speech, data, end_convo = self.ca.respond_to_action('input.habit_commit', parameters={'habit': 'run'})
+        speech, data, end_convo = self.ca.respond_to_action(
+            "input.habit_commit", parameters={"habit": "run"}
+        )
         self.assertTrue("You've committed to 'Run' today" in speech, speech)
 
     def test_agent_add_task(self):
-        speech, data, end_convo = self.ca.respond_to_action('input.task_add', parameters={'task_name': 'go to the gym'})
+        speech, data, end_convo = self.ca.respond_to_action(
+            "input.task_add", parameters={"task_name": "go to the gym"}
+        )
         self.assertTrue("Task added" in speech, speech)
 
         # Empty task name, error
-        speech, data, end_convo = self.ca.respond_to_action('input.task_add', parameters={'task_name': ''})
+        speech, data, end_convo = self.ca.respond_to_action(
+            "input.task_add", parameters={"task_name": ""}
+        )
         self.assertTrue("Sorry" in speech, speech)
 
         recent_tasks = Task.Recent(self.u)
@@ -88,97 +108,163 @@ class AgentTestCase(BaseTestCase):
 
     def test_agent_no_user(self):
         self.ca.user = None
-        speech, data, end_convo = self.ca.respond_to_action('input.status_request')
-        self.assertEqual("To get started with Flow, please link your account with Flow", speech)
+        speech, data, end_convo = self.ca.respond_to_action("input.status_request")
+        self.assertEqual(
+            "To get started with tyr, please link your account with tyr", speech
+        )
 
     def test_help(self):
-        speech, data, end_convo = self.ca.respond_to_action('input.help')
-        self.assertEqual("With the Flow agent, you can track top tasks each day, habits to build, and monthly and annual goals. You can also submit daily journals at the end of each day to track anything you want. I'm still in beta, so please visit http://flowdash.co to get set up and see everything you can do.", speech)
+        speech, data, end_convo = self.ca.respond_to_action("input.help")
+        self.assertEqual(
+            "With the tyr agent, you can track top tasks each day, habits to build, and monthly and annual goals. You can also submit daily journals at the end of each day to track anything you want. I'm still in beta",
+            speech,
+        )
 
-        speech, data, end_convo = self.ca.respond_to_action('input.help_habits')
+        speech, data, end_convo = self.ca.respond_to_action("input.help_habits")
         self.assertTrue(HABIT.HELP in speech)
 
-        speech, data, end_convo = self.ca.respond_to_action('input.help_journals')
+        speech, data, end_convo = self.ca.respond_to_action("input.help_journals")
         self.assertTrue(JOURNAL.HELP in speech)
 
-        speech, data, end_convo = self.ca.respond_to_action('input.help_tasks')
+        speech, data, end_convo = self.ca.respond_to_action("input.help_tasks")
         self.assertTrue(TASK.HELP in speech)
 
-        speech, data, end_convo = self.ca.respond_to_action('input.help_goals')
+        speech, data, end_convo = self.ca.respond_to_action("input.help_goals")
         self.assertTrue(GOAL.HELP in speech)
 
     def test_parsing(self):
         volley = [
             # Hello
-            ('hi', 'input.hello', None),
-            ("What's up", 'input.hello_question', None),
-            ("how's it going?", 'input.hello_question', None),
-
+            ("hi", "input.hello", None),
+            ("What's up", "input.hello_question", None),
+            ("how's it going?", "input.hello_question", None),
             # Goal requests
-            ('what are my goals?', 'input.goals_request', None),
-            ('remind me my goals', 'input.goals_request', None),
-            ('monthly goals', 'input.goals_request', None),
-            ('my goals this month', 'input.goals_request', None),
-
+            ("what are my goals?", "input.goals_request", None),
+            ("remind me my goals", "input.goals_request", None),
+            ("monthly goals", "input.goals_request", None),
+            ("my goals this month", "input.goals_request", None),
             # Adding habits
-            ('new habit: run', 'input.habit_add', {'habit': 'run'}),
-            ('create habit go fishing', 'input.habit_add', {'habit': 'go fishing'}),
-
+            ("new habit: run", "input.habit_add", {"habit": "run"}),
+            ("create habit go fishing", "input.habit_add", {"habit": "go fishing"}),
             # Habit reports
-            ('mark run as complete', 'input.habit_or_task_report', {'habit_or_task': 'run'}),
-            ('mark run complete', 'input.habit_or_task_report', {'habit_or_task': 'run'}),
-            ('mark run as done', 'input.habit_or_task_report', {'habit_or_task': 'run'}),
-            ('mark meditate as finished', 'input.habit_or_task_report', {'habit_or_task': 'meditate'}),
-            ('i finished meditate', 'input.habit_or_task_report', {'habit_or_task': 'meditate'}),
-            ('set run as complete', 'input.habit_or_task_report', {'habit_or_task': 'run'}),
-            ('habit complete: run', 'input.habit_or_task_report', {'habit_or_task': 'run'}),
-            ('habit done run', 'input.habit_or_task_report', {'habit_or_task': 'run'}),
-
+            (
+                "mark run as complete",
+                "input.habit_or_task_report",
+                {"habit_or_task": "run"},
+            ),
+            (
+                "mark run complete",
+                "input.habit_or_task_report",
+                {"habit_or_task": "run"},
+            ),
+            (
+                "mark run as done",
+                "input.habit_or_task_report",
+                {"habit_or_task": "run"},
+            ),
+            (
+                "mark meditate as finished",
+                "input.habit_or_task_report",
+                {"habit_or_task": "meditate"},
+            ),
+            (
+                "i finished meditate",
+                "input.habit_or_task_report",
+                {"habit_or_task": "meditate"},
+            ),
+            (
+                "set run as complete",
+                "input.habit_or_task_report",
+                {"habit_or_task": "run"},
+            ),
+            (
+                "habit complete: run",
+                "input.habit_or_task_report",
+                {"habit_or_task": "run"},
+            ),
+            ("habit done run", "input.habit_or_task_report", {"habit_or_task": "run"}),
             # Habit commitments
-            ('i will run tonight', 'input.habit_commit', {'habit': 'run'}),
-            ('commit to make dinner tonight', 'input.habit_commit', {'habit': 'make dinner'}),
-            ('planning to run this evening', 'input.habit_commit', {'habit': 'run'}),
-            ('im going to run later', 'input.habit_commit', {'habit': 'run'}),
-
+            ("i will run tonight", "input.habit_commit", {"habit": "run"}),
+            (
+                "commit to make dinner tonight",
+                "input.habit_commit",
+                {"habit": "make dinner"},
+            ),
+            ("planning to run this evening", "input.habit_commit", {"habit": "run"}),
+            ("im going to run later", "input.habit_commit", {"habit": "run"}),
             # Habit status
-            ('habit progress', 'input.habit_status', None),
-
+            ("habit progress", "input.habit_status", None),
             # Add habit
-            ('new habit: meditate', 'input.habit_add', {'habit': 'meditate'}),
-            ('add habit meditate', 'input.habit_add', {'habit': 'meditate'}),
-
+            ("new habit: meditate", "input.habit_add", {"habit": "meditate"}),
+            ("add habit meditate", "input.habit_add", {"habit": "meditate"}),
             # Add task
-            ('add task finish report', 'input.task_add', {'task_name': 'finish report'}),
-            ('remind me to clean the closet', 'input.task_add', {'task_name': 'clean the closet'}),
-            ('remind me to "mow the lawn"', 'input.task_add', {'task_name': 'mow the lawn'}),
-            ('remind me to "sweep the floor"', 'input.task_add', {'task_name': 'sweep the floor'}),
-            ('add task "check out june\'s data"', 'input.task_add', {'task_name': 'check out june\'s data'}),
-
+            (
+                "add task finish report",
+                "input.task_add",
+                {"task_name": "finish report"},
+            ),
+            (
+                "remind me to clean the closet",
+                "input.task_add",
+                {"task_name": "clean the closet"},
+            ),
+            (
+                'remind me to "mow the lawn"',
+                "input.task_add",
+                {"task_name": "mow the lawn"},
+            ),
+            (
+                'remind me to "sweep the floor"',
+                "input.task_add",
+                {"task_name": "sweep the floor"},
+            ),
+            (
+                'add task "check out june\'s data"',
+                "input.task_add",
+                {"task_name": "check out june's data"},
+            ),
             # View tasks
-            ('my tasks', 'input.task_view', None),
-            ('tasks today', 'input.task_view', None),
-
+            ("my tasks", "input.task_view", None),
+            ("tasks today", "input.task_view", None),
             # Task reports
-            ('mark go to the pool as done', 'input.habit_or_task_report', {'habit_or_task': 'go to the pool'}),
-            ('i completed feed the cat', 'input.habit_or_task_report', {'habit_or_task': 'feed the cat'}),
-            ('task done feed the cat', 'input.habit_or_task_report', {'habit_or_task': 'feed the cat'}),
-
+            (
+                "mark go to the pool as done",
+                "input.habit_or_task_report",
+                {"habit_or_task": "go to the pool"},
+            ),
+            (
+                "i completed feed the cat",
+                "input.habit_or_task_report",
+                {"habit_or_task": "feed the cat"},
+            ),
+            (
+                "task done feed the cat",
+                "input.habit_or_task_report",
+                {"habit_or_task": "feed the cat"},
+            ),
             # Help
-            ('what can i do', 'input.help', None),
-            ('???', 'input.help', None),
-            ('help', 'input.help', None),
-            ('help on tasks', 'input.help_tasks', None),
-            ('what are habits', 'input.help_habits', None),
-            ('learn about journaling', 'input.help_journals', None),
-
+            ("what can i do", "input.help", None),
+            ("???", "input.help", None),
+            ("help", "input.help", None),
+            ("help on tasks", "input.help_tasks", None),
+            ("what are habits", "input.help_habits", None),
+            ("learn about journaling", "input.help_journals", None),
             # Disconnect
-            ('disconnect', 'input.disconnect', None),
+            ("disconnect", "input.disconnect", None),
         ]
         for v in volley:
             raw_message, expected_action, expected_params = v
             action, params = self.ca.parse_message(raw_message)
-            self.assertEqual(expected_action, action, "Error in %s. %s <> %s" % (raw_message, expected_action, action))
-            self.assertEqual(expected_params, params, "Error in %s. %s <> %s" % (raw_message, expected_params, params))
+            self.assertEqual(
+                expected_action,
+                action,
+                "Error in %s. %s <> %s" % (raw_message, expected_action, action),
+            )
+            self.assertEqual(
+                expected_params,
+                params,
+                "Error in %s. %s <> %s" % (raw_message, expected_params, params),
+            )
 
     def test_stateful_journal_submission(self):
         # Journal submissions ask multiple questions and require
@@ -191,26 +277,28 @@ class AgentTestCase(BaseTestCase):
         RATING = 7
 
         conversation = [
-            # (User message, Flow reply)
+            # (User message, tyr reply)
             ("daily report", "A few words on your day?", False),  # narrative
             (NARR, "How was the day?", False),  # day_rating
             ("?", JOURNAL.INVALID_REPLY + " " + JOURNAL.INVALID_SUFFIX_NUMERIC, False),
             ("%s" % RATING, JOURNAL.TOP_TASK_PROMPT, False),
             ("Finish hacking the machine", JOURNAL.TOP_TASK_PROMPT_ADDTL, False),
-            ("done", "Report submitted!", True)
+            ("done", "Report submitted!", True),
         ]
         for message, expected_reply, expected_end_of_convo in conversation:
             action, params = self.ca.parse_message(message)
-            reply, message_data, end_convo = self.ca.respond_to_action(action, parameters=params)
+            reply, message_data, end_convo = self.ca.respond_to_action(
+                action, parameters=params
+            )
             self.assertEqual(expected_end_of_convo, end_convo)
             self.assertEqual(reply, expected_reply)
 
         # Confirm journal saved properly
         jrnl = MiniJournal.Get(self.u)
         self.assertIsNotNone(jrnl)
-        rating = jrnl.get_data_value('day_rating')
+        rating = jrnl.get_data_value("day_rating")
         self.assertEqual(rating, RATING)
-        narrative = jrnl.get_data_value('narrative')
+        narrative = jrnl.get_data_value("narrative")
         self.assertEqual(narrative, NARR)
 
         # Confirm we have tags from narrative
@@ -229,5 +317,7 @@ class AgentTestCase(BaseTestCase):
 
         # Try to submit again
         action, params = self.ca.parse_message("daily journal")
-        reply, message_data, end_convo = self.ca.respond_to_action(action, parameters=params)
+        reply, message_data, end_convo = self.ca.respond_to_action(
+            action, parameters=params
+        )
         self.assertEqual(reply, JOURNAL.ALREADY_SUBMITTED_REPLY)

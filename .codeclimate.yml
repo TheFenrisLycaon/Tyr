@@ -6,13 +6,13 @@ engines:
     enabled: true
     config:
       languages:
-      - javascript
-      - python
+        - javascript
+        - python
   eslint:
     enabled: true
     config:
       extensions:
-      - .es6
+        - .es6
   fixme:
     enabled: true
   radon:
@@ -24,14 +24,14 @@ engines:
       python_version: 2
 ratings:
   paths:
-  - "**.css"
-  - "**.inc"
-  - "**.js"
-  - "**.jsx"
-  - "**.module"
-  - "**.py"
+    - "**.css"
+    - "**.inc"
+    - "**.js"
+    - "**.jsx"
+    - "**.module"
+    - "**.py"
 exclude_paths:
-- "tests/"
-- "testing/"
-- "static/"
-- "pytz/"
+  - "tests/"
+  - "testing/"
+  - "static/"
+  - "pytz/"

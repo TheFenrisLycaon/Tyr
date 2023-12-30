@@ -1,16 +1,19 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-from google.appengine.ext import db
-from google.appengine.ext import testbed
-from datetime import datetime
-from models import User
-from base_test_case import BaseTestCase
-from flow import app as tst_app
-import tools
 import imp
+from datetime import datetime
+
+from utils import tools
+from google.appengine.ext import db, testbed
+
+from controllers.main import app as tst_app
+from models.models import User
+
+from .base_test_case import BaseTestCase
+
 try:
-    imp.find_module('secrets', ['settings'])
+    imp.find_module("secrets", ["settings"])
 except ImportError:
     from settings import secrets_template as secrets
 else:
@@ -20,7 +23,6 @@ USER_GOOGLE_ID = "1234"
 
 
 class AuthenticationTestCase(BaseTestCase):
-
     def setUp(self):
         self.set_application(tst_app)
         self.setup_testbed()
@@ -40,25 +42,27 @@ class AuthenticationTestCase(BaseTestCase):
 
     def testUserGoogleSimpleAccountLinking(self):
         import jwt
+
         user = User.Create(email="test@example.com", g_id=USER_GOOGLE_ID)
         user.put()
 
         creation = int(tools.unixtime(ms=False))
         payload = {
-            'iss': 'https://accounts.google.com',
-            'aud': secrets.GOOGLE_CLIENT_ID,
-            'sub': USER_GOOGLE_ID,
-            'email': "test@example.com",
-            'locale': "en_US",
+            "iss": "https://accounts.google.com",
+            "aud": secrets.GOOGLE_CLIENT_ID,
+            "sub": USER_GOOGLE_ID,
+            "email": "test@example.com",
+            "locale": "en_US",
             "iat": creation,
-            "exp": creation + 60*60
+            "exp": creation + 60 * 60,
         }
         params = {
-            'grant_type': 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-            'intent': 'get',
-            'assertion': jwt.encode(payload, secrets.GOOGLE_CLIENT_SECRET, algorithm='HS256')
+            "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+            "intent": "get",
+            "assertion": jwt.encode(
+                payload, secrets.GOOGLE_CLIENT_SECRET, algorithm="HS256"
+            ),
         }
         response = self.post_json("/api/auth/google/token", params)
-        token_type = response.get('token_type')
-        self.assertEqual(token_type, 'bearer')
-
+        token_type = response.get("token_type")
+        self.assertEqual(token_type, "bearer")

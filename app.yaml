@@ -1,4 +1,4 @@
-runtime: python27
+runtime: python311
 api_version: 1
 threadsafe: true
 
@@ -6,96 +6,96 @@ default_expiration: "1d"
 
 automatic_scaling:
   max_instances: 1
-  max_pending_latency: 200ms  # default 30ms
+  max_pending_latency: 200ms # default 30ms
 
 inbound_services:
-- warmup
+  - warmup
 
 handlers:
-- url: /favicon.ico
-  static_files: static/favicon.ico
-  upload: static/favicon\.ico
+  - url: /favicon.ico
+    static_files: static/favicon.ico
+    upload: static/favicon\.ico
 
-- url: /(.*\.(appcache|manifest))
-  mime_type: text/cache-manifest
-  static_files: static/\1
-  upload: static/(.*\.(appcache|manifest))
-  expiration: "0m"
+  - url: /(.*\.(appcache|manifest))
+    mime_type: text/cache-manifest
+    static_files: static/\1
+    upload: static/(.*\.(appcache|manifest))
+    expiration: "0m"
 
-- url: /images
-  static_dir: images
-  expiration: "99d"
+  - url: /images
+    static_dir: images
+    expiration: "99d"
 
-- url: /dist/src
-  static_dir: dist/src
+  - url: /dist/src
+    static_dir: dist/src
 
-- url: /dist/build
-  static_dir: dist/build
+  - url: /dist/build
+    static_dir: dist/build
 
-- url: /static
-  static_dir: static
-  expiration: "99d"
+  - url: /static
+    static_dir: static
+    expiration: "99d"
 
-- url: /cron/.*
-  script: flow.app
-  login: admin
+  - url: /cron/.*
+    script: tyr.app
+    login: admin
 
-- url: /admin/gauth.*
-  script: flow.app
-  login: admin
-  secure: always
+  - url: /admin/gauth.*
+    script: tyr.app
+    login: admin
+    secure: always
 
-- url: /humans.txt
-  static_files: humans.txt
-  upload: humans.txt
+  - url: /humans.txt
+    static_files: humans.txt
+    upload: humans.txt
 
-- url: /robots.txt
-  static_files: robots.txt
-  upload: robots.txt
+  - url: /robots.txt
+    static_files: robots.txt
+    upload: robots.txt
 
-- url: /js
-  static_dir: js
+  - url: /js
+    static_dir: js
 
-- url: /tasks/
-  script: flow.app
-  login: admin
+  - url: /tasks/
+    script: tyr.app
+    login: admin
 
-- url: /.*
-  script: flow.app
-  secure: always
+  - url: /.*
+    script: tyr.app
+    secure: always
 
 builtins:
-- deferred: on
-- remote_api: on
+  - deferred: on
+  - remote_api: on
 
 skip_files:
-- ^(.*/)?#.*#$
-- ^(.*/)?.*~$
-- ^(.*/)?.*\.py[co]$
-- ^(.*/)?.*\.scss$
-- ^(.*/)?.*\.less$
-- ^(.*/)?.*/RCS/.*$
-- ^(.*/)?\..*$
-- ^(node_modules/.*)
-- .*node_modules
-- ^design/.*$
-- ^lib/.*(\.(?!py)).*$
-- ^scripts/.*$
-- ^env/.*$
-- ^\.Python$
-- ^bin/.*$
+  - ^(.*/)?#.*#$
+  - ^(.*/)?.*~$
+  - ^(.*/)?.*\.py[co]$
+  - ^(.*/)?.*\.scss$
+  - ^(.*/)?.*\.less$
+  - ^(.*/)?.*/RCS/.*$
+  - ^(.*/)?\..*$
+  - ^(node_modules/.*)
+  - .*node_modules
+  - ^design/.*$
+  - ^lib/.*(\.(?!py)).*$
+  - ^scripts/.*$
+  - ^env/.*$
+  - ^\.Python$
+  - ^bin/.*$
 
 libraries:
-- name: django
-  version: "1.2"
-- name: webapp2
-  version: "2.5.1"
-- name: jinja2
-  version: "2.6"
-- name: lxml
-  version: "2.3.5"
-- name: pycrypto
-  version: "2.6"
+  - name: django
+    version: "1.2"
+  - name: webapp2
+    version: "2.5.1"
+  - name: jinja2
+    version: "2.6"
+  - name: lxml
+    version: "2.3.5"
+  - name: pycrypto
+    version: "2.6"
 
 env_variables:
-  GOOGLE_APPLICATION_CREDENTIALS: 'settings/genzai-app-f02b0e933bb4.json'
+  GOOGLE_APPLICATION_CREDENTIALS: "settings/genzai-app-f02b0e933bb4.json"

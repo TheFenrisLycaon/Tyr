@@ -1,21 +1,20 @@
 cron:
+  - description: sync with pocket & goodreads
+    url: /cron/readables/sync
+    schedule: every day 20:30
 
-- description: sync with pocket & goodreads
-  url: /cron/readables/sync
-  schedule: every day 20:30
+  - description: sync from google fit
+    url: /cron/pull/google_fit
+    schedule: every day 03:00
 
-- description: sync from google fit
-  url: /cron/pull/google_fit
-  schedule: every day 03:00
+  - description: sync with github
+    url: /cron/pull/github
+    schedule: every day 00:00
 
-- description: sync with github
-  url: /cron/pull/github
-  schedule: every day 00:00
+  - description: Delete reports older than 30 days
+    url: /cron/reports/delete_old
+    schedule: every sunday 00:00
 
-- description: Delete reports older than 30 days
-  url: /cron/reports/delete_old
-  schedule: every sunday 00:00
-
-- description: push to bigquery
-  url: /cron/push/bigquery
-  schedule: every saturday 00:00
+  - description: push to bigquery
+    url: /cron/push/bigquery
+    schedule: every saturday 00:00

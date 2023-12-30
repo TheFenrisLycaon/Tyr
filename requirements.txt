@@ -1,10 +1,27 @@
-# Install with pip install -t lib -r requirements.txt (into lib/)
-rsa==4.7
+# GCP
+google-cloud-datastore
+appengine-python-standard
+google-cloud-logging
+google_api_python_client
+
+# Web
 beautifulsoup4
-evernote==1.25.2
-oauth2client==3.0.0
-# google-cloud-bigquery==0.21.0
-google_api_python_client==1.5.1
-GoogleAppEngineCloudStorageClient==1.9.22.1
-pyjwt==1.4.1
-pybase62
+gunicorn
+flask
+jinja2
+pyjwt
+webapp2
+
+# Testing
+WebTest
+mock
+
+# Libraries
+oauth2client
+rsa
+pycrypto
+
+# Development
+pbr
+black
+isort

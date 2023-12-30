@@ -1,10 +1,10 @@
 var AppConstants = {
     YEAR: "2017",
-    SITENAME: "Flow",
-    AUTHOR: "Jeremy Gordon",
-    AUTHOR_URL: "http://jgordon.io",
+    SITENAME: "tyr",
+    AUTHOR: "Fenris Lycaon",
+    AUTHOR_URL: "https://thefenrislycaon.github.io/",
     PERSISTENCE: "bootstrap",
-    USER_STORAGE_KEY: 'flowUser',
+    USER_STORAGE_KEY: 'tyrUser',
     DEFAULT_WEEK_START: 0, // Sunday (d.getDay())
     HABIT_ACTIVE_LIMIT: 20,
     // Journals
@@ -16,9 +16,9 @@ var AppConstants = {
     USER_ADMIN: 2,
     JOURNAL_HOURS_BACK: 8,
     DASHBOARD_PAGE_TITLE: "Dashboard",
-    SECURE_BASE: "https://flowdash.co",
-    TAGLINE: "Flow is a habit tracker and personal data analytics app that lets you keep focus on what matters. Flow owns none of your data. That's yours.",
-    DEPRECATION: "Flow is no longer being maintained. We recommend exporting user data.",
+    SECURE_BASE: "/",
+    TAGLINE: "tyr is a habit tracker and personal data analytics app that lets you keep focus on what matters. tyr owns none of your data. That's yours.",
+    DEPRECATION: "tyr is no longer being maintained. We recommend exporting user data.",
     INTEGRATIONS: [
         { value: 'pocket', label: "Pocket" },
         { value: 'goodreads', label: "Goodreads" },

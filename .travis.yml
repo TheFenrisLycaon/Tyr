@@ -1,26 +1,25 @@
 # Use Dockerized infrastructure
 sudo: false
 language: python
-python: 2.7
+python: 3.11
 # Cache our Gcloud SDK between commands
 cache:
   directories:
-  - "$HOME/google-cloud-sdk/"
+    - "$HOME/google-cloud-sdk/"
 env:
-# Make sure App Engine SDK is in the Python path
-- GAE_PYTHONPATH=${HOME}/.cache/google_appengine PATH=$PATH:${HOME}/google-cloud-sdk/bin PYTHONPATH=${PYTHONPATH}:${GAE_PYTHONPATH} CLOUDSDK_CORE_DISABLE_PROMPTS=1
+  # Make sure App Engine SDK is in the Python path
+  - GAE_PYTHONPATH=${HOME}/.cache/google_appengine PATH=$PATH:${HOME}/google-cloud-sdk/bin PYTHONPATH=${PYTHONPATH}:${GAE_PYTHONPATH} CLOUDSDK_CORE_DISABLE_PROMPTS=1
 before_install:
-# Install Google App Engine Python SDK
-- if [ ! -d "${GAE_PYTHONPATH}" ]; then
+  # Install Google App Engine Python SDK
+  - if [ ! -d "${GAE_PYTHONPATH}" ]; then
     python scripts/fetch_gae_sdk.py $(dirname "${GAE_PYTHONPATH}");
-  fi
+    fi
 install:
-# Install the Python dependencies
-- pip install -t lib -r requirements.txt
-- pip install -r local.requirements.txt
-- pip install coveralls
+  # Install the Python dependencies
+  - pip install -t lib -r requirements.txt
+  - pip install -r local.requirements.txt
+  - pip install coveralls
 script:
-# Run the unit tests & end to end tests
-- coverage run --omit="runtests.py,testing/*,pytz/*,lib/*,*/site-packages/*,*/google_appengine/*,*/virtualenv/*,actions/*" scripts/runtests.py ${GAE_PYTHONPATH} testing/ all
-after_success:
-  coveralls
+  # Run the unit tests & end to end tests
+  - coverage run --omit="runtests.py,testing/*,pytz/*,lib/*,*/site-packages/*,*/google_appengine/*,*/virtualenv/*,actions/*" scripts/runtests.py ${GAE_PYTHONPATH} testing/ all
+after_success: coveralls

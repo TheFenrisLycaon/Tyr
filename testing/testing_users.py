@@ -1,16 +1,16 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-from datetime import datetime
-from base_test_case import BaseTestCase
-from models import Project, User
-from flow import app as tst_app
-from datetime import timedelta
 import json
+from datetime import datetime, timedelta
+
+from controllers.main import app as tst_app
+from models.models import Project, User
+
+from .base_test_case import BaseTestCase
 
 
 class UsersTestCase(BaseTestCase):
-
     def setUp(self):
         self.set_application(tst_app)
         self.setup_testbed()
@@ -41,7 +41,6 @@ class UsersTestCase(BaseTestCase):
 
     def test_integration_props(self):
         u = self.users[0]
-        u.set_integration_prop('key', 'value')
+        u.set_integration_prop("key", "value")
         integrations_dict = json.loads(u.integrations)
-        self.assertEqual(integrations_dict.get('key'), 'value')
-
+        self.assertEqual(integrations_dict.get("key"), "value")
